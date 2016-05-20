@@ -1,6 +1,10 @@
 var todo = angular.module('todo', []);
 
-function mainController($scope, $http) {
+todo.controller('mainController', ['$scope', '$http', function ($scope, $http) {
+        
+    $scope.logged = false;
+    
+    $scope.formData = {};
     
     // when landing on the page, get all todos and show them
     $http.get('/api/todos')
@@ -24,4 +28,6 @@ function mainController($scope, $http) {
                 $scope.todos = data;
             });
     };
-}
+
+    
+}]);
