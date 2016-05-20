@@ -17,7 +17,8 @@
 
     // define model
     var Todo = mongoose.model('Todo', {
-        text : String
+        text : String,
+        email: String
     });
     
     // todo handler
