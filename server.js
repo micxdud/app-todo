@@ -18,7 +18,8 @@
     // define model
     var Todo = mongoose.model('Todo', {
         text : String,
-        email: String
+        email: String,
+        isCompleted : Boolean
     });
     
     // todo handler
@@ -42,7 +43,8 @@
         // create a todo, information comes from AJAX request from Angular
         Todo.create({
             text : req.body.text,
-            done : false
+            email : req.body.email,
+            isCompleted : false
         }, function(err, todo) {
             if (err)
                 res.send(err);
@@ -71,6 +73,33 @@
                     res.send(err)
                 res.json(todos);
             });
+        });
+    });
+    
+    // complete or incomplete todo
+    app.post('/api/todos/complete/:todo_id', function(req, res) {
+        Todo.findById(req.params.todo_id, function(err, todo) {
+            if(todo){
+                if(todo.isCompleted){
+                    todo.isCompleted = false;
+                }else{
+                    todo.isCompleted = true;
+                }
+                
+                todo.save(function(err) {
+                  if (err)
+                    console.log('error')
+                  else
+                    console.log('success')
+                });
+                
+                // get and return all the todos after you create another
+                Todo.find(function(err, todos) {
+                    if (err)
+                        res.send(err)
+                    res.json(todos);
+                });
+            }
         });
     });
 
