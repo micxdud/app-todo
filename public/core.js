@@ -1,4 +1,4 @@
-var todo = angular.module('todo', []);
+var todo = angular.module('todo', ['ui.bootstrap']);
 
 todo.controller('mainController', ['$scope', '$http', function ($scope, $http) {
         
@@ -7,16 +7,26 @@ todo.controller('mainController', ['$scope', '$http', function ($scope, $http) {
     $scope.formData = {};
     var email = "";
     
+    $scope.completition = 'all'
+    
     // when landing on the page, get all todos and show them
     $http.get('/api/todos')
         .success(function(data) {
             $scope.todos = data;
         });
+        
+        
+    $scope.filterTasks = function(value){
+        $http.get('/api/todos/completition/' + value)
+            .success(function(data) {
+                $scope.todos = data;
+            });
+    };
 
     $scope.login = function() {
         email = $scope.formData.email;
         $scope.logged = true;
-    }
+    };
 
     // when submitting the add form, send the text to the API
     $scope.createTodo = function() {
@@ -28,8 +38,8 @@ todo.controller('mainController', ['$scope', '$http', function ($scope, $http) {
     };
 
     // delete a todo after checking it
-    $scope.deleteTodo = function(id) {
-        $http.delete('/api/todos/' + id)
+    $scope.deleteTodo = function(id,completition) {
+        $http.delete('/api/todos/' + id + '/' + completition)
             .success(function(data) {
                 $scope.todos = data;
             });
