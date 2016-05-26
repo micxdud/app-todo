@@ -37,41 +37,65 @@
         });
     });
     
-    // get completed, incompleted or all todos
-    app.get('/api/todos/completition/:value', function(req, res) {
+    // filter tasks
+    app.get('/api/todos/filter/:completition/:owner/:email', function(req, res) {
 
-        if(req.params.value == 'all'){
-            // use mongoose to get all todos in the database
-            Todo.find(function(err, todos) {
+        if(req.params.completition == 'all'){
+            
+            if(req.params.owner == 'all'){
+                // use mongoose to get all todos in the database
+                Todo.find(function(err, todos) {
+        
+                    // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                    if (err)
+                        res.send(err)
+        
+                    res.json(todos); // return all todos in JSON format
+                });
+            }else{
+                Todo.find({email : req.params.email}, function(err, todos) {
     
-                // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-                if (err)
-                    res.send(err)
-    
-                res.json(todos); // return all todos in JSON format
-            });
+                    // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                    if (err)
+                        res.send(err)
+        
+                    res.json(todos); // return all todos in JSON format
+                });
+            }
         }else{
 
             var completed = false;
             
-            if(req.params.value == 'done'){
+            if(req.params.completition == 'done'){
                 completed = true;
             }
 
-            // use mongoose to get completed or incompleted todos
-            Todo.find({isCompleted : completed}, function(err, todos) {
-    
-                // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-                if (err)
-                    res.send(err)
-    
-                res.json(todos); // return all todos in JSON format
-            });
+            if(req.params.owner == 'all'){
+                // use mongoose to get completed or incompleted todos
+                Todo.find({isCompleted : completed}, function(err, todos) {
+        
+                    // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                    if (err)
+                        res.send(err)
+        
+                    res.json(todos); // return all todos in JSON format
+                });
+            }else{
+                // use mongoose to get completed or incompleted todos
+                Todo.find({isCompleted : completed, email : req.params.email}, function(err, todos) {
+        
+                    // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                    if (err)
+                        res.send(err)
+        
+                    res.json(todos); // return all todos in JSON format
+                });
+            }
         }
     });
 
     // create todo and send back all todos after creation
-    app.post('/api/todos', function(req, res) {
+    app.post('/api/todos/:completition/:owner/:email', function(req, res) {
 
         // create a todo, information comes from AJAX request from Angular
         Todo.create({
@@ -82,34 +106,28 @@
             if (err)
                 res.send(err);
 
-            // get and return all the todos after you create another
-            Todo.find(function(err, todos) {
-                if (err)
-                    res.send(err)
-                res.json(todos);
-            });
-        });
-
-    });
-
-    // delete a todo
-    app.delete('/api/todos/:todo_id/:completition', function(req, res) {
-        Todo.remove({
-            _id : req.params.todo_id
-        }, function(err, todo) {
-            if (err)
-                res.send(err);
-
             if(req.params.completition == 'all'){
-            // use mongoose to get all todos in the database
-                Todo.find(function(err, todos) {
+            
+                if(req.params.owner == 'all'){
+                    // use mongoose to get all todos in the database
+                    Todo.find(function(err, todos) {
+            
+                        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                        if (err)
+                            res.send(err)
+            
+                        res.json(todos); // return all todos in JSON format
+                    });
+                }else{
+                    Todo.find({email : req.params.email}, function(err, todos) {
         
-                    // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-                    if (err)
-                        res.send(err)
-        
-                    res.json(todos); // return all todos in JSON format
-                });
+                        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                        if (err)
+                            res.send(err)
+            
+                        res.json(todos); // return all todos in JSON format
+                    });
+                }
             }else{
     
                 var completed = false;
@@ -118,21 +136,97 @@
                     completed = true;
                 }
     
-                // use mongoose to get completed or incompleted todos
-                Todo.find({isCompleted : completed}, function(err, todos) {
+                if(req.params.owner == 'all'){
+                    // use mongoose to get completed or incompleted todos
+                    Todo.find({isCompleted : completed}, function(err, todos) {
+            
+                        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                        if (err)
+                            res.send(err)
+            
+                        res.json(todos); // return all todos in JSON format
+                    });
+                }else{
+                    // use mongoose to get completed or incompleted todos
+                    Todo.find({isCompleted : completed, email : req.params.email}, function(err, todos) {
+            
+                        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                        if (err)
+                            res.send(err)
+            
+                        res.json(todos); // return all todos in JSON format
+                    });
+                }
+            }
+        });
+
+    });
+
+    // delete a todo
+    app.delete('/api/todos/:todo_id/:completition/:owner/:email', function(req, res) {
+        Todo.remove({
+            _id : req.params.todo_id
+        }, function(err, todo) {
+            if (err)
+                res.send(err);
+
+            if(req.params.completition == 'all'){
+            
+                if(req.params.owner == 'all'){
+                    // use mongoose to get all todos in the database
+                    Todo.find(function(err, todos) {
+            
+                        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                        if (err)
+                            res.send(err)
+            
+                        res.json(todos); // return all todos in JSON format
+                    });
+                }else{
+                    Todo.find({email : req.params.email}, function(err, todos) {
         
-                    // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-                    if (err)
-                        res.send(err)
-        
-                    res.json(todos); // return all todos in JSON format
-                });
+                        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                        if (err)
+                            res.send(err)
+            
+                        res.json(todos); // return all todos in JSON format
+                    });
+                }
+            }else{
+    
+                var completed = false;
+                
+                if(req.params.completition == 'done'){
+                    completed = true;
+                }
+    
+                if(req.params.owner == 'all'){
+                    // use mongoose to get completed or incompleted todos
+                    Todo.find({isCompleted : completed}, function(err, todos) {
+            
+                        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                        if (err)
+                            res.send(err)
+            
+                        res.json(todos); // return all todos in JSON format
+                    });
+                }else{
+                    // use mongoose to get completed or incompleted todos
+                    Todo.find({isCompleted : completed, email : req.params.email}, function(err, todos) {
+            
+                        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                        if (err)
+                            res.send(err)
+            
+                        res.json(todos); // return all todos in JSON format
+                    });
+                }
             }
         });
     });
     
     // complete or incomplete todo
-    app.post('/api/todos/complete/:todo_id', function(req, res) {
+    app.post('/api/todos/complete/:todo_id/:completition/:owner/:email', function(req, res) {
         Todo.findById(req.params.todo_id, function(err, todo) {
             if(todo){
                 if(todo.isCompleted){
@@ -148,12 +242,58 @@
                     console.log('success')
                 });
                 
-                // get and return all the todos after you create another
-                Todo.find(function(err, todos) {
-                    if (err)
-                        res.send(err)
-                    res.json(todos);
-                });
+                if(req.params.completition == 'all'){
+            
+                    if(req.params.owner == 'all'){
+                        // use mongoose to get all todos in the database
+                        Todo.find(function(err, todos) {
+                
+                            // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                            if (err)
+                                res.send(err)
+                
+                            res.json(todos); // return all todos in JSON format
+                        });
+                    }else{
+                        Todo.find({email : req.params.email}, function(err, todos) {
+            
+                            // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                            if (err)
+                                res.send(err)
+                
+                            res.json(todos); // return all todos in JSON format
+                        });
+                    }
+                }else{
+        
+                    var completed = false;
+                    
+                    if(req.params.completition == 'done'){
+                        completed = true;
+                    }
+        
+                    if(req.params.owner == 'all'){
+                        // use mongoose to get completed or incompleted todos
+                        Todo.find({isCompleted : completed}, function(err, todos) {
+                
+                            // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                            if (err)
+                                res.send(err)
+                
+                            res.json(todos); // return all todos in JSON format
+                        });
+                    }else{
+                        // use mongoose to get completed or incompleted todos
+                        Todo.find({isCompleted : completed, email : req.params.email}, function(err, todos) {
+                
+                            // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                            if (err)
+                                res.send(err)
+                
+                            res.json(todos); // return all todos in JSON format
+                        });
+                    }
+                }
             }
         });
     });

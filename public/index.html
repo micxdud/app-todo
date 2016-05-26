@@ -50,13 +50,13 @@
         <div ng-if="logged">
             <!-- HEADER AND TODO COUNT -->
             <div class="jumbotron text-center">
-                <h1>Tasks left <span class="label label-info">{{ todos.length }}</span></h1>
+                <h1>Tasks left <span class="label label-info">{{ allTasks }}</span></h1>
             </div>
             
             <!-- FORM TO CREATE TODO -->
             <div class="row">
                 <div class="col-sm-6">
-                    <form ng-submit="createTodo()">
+                    <form ng-submit="createTodo(completition,owner,formData.email)">
                         <div class="form-group">
                             <!-- BIND THIS VALUE TO formData.text -->
                             <input type="text" class="form-control input-lg" placeholder="Write any task here" ng-model="formData.text">
@@ -64,22 +64,15 @@
                     </form>
                 </div>
                 <div class="col-sm-6">
-                    <div class="btn-group">
-                        <label class="btn btn-default" ng-model="completition" ng-change="filterTasks(completition)" uib-btn-radio="'all'">All</label>
-                        <label class="btn btn-default" ng-model="completition" ng-change="filterTasks(completition)" uib-btn-radio="'done'">Done</label>
-                        <label class="btn btn-default" ng-model="completition" ng-change="filterTasks(completition)" uib-btn-radio="'undone'">Undone</label>
+                    <div class="btn-group pull-left">
+                        <label class="btn btn-default btn-lg" ng-model="completition" ng-change="filterTasks(completition,owner,formData.email)" uib-btn-radio="'all'">All</label>
+                        <label class="btn btn-default btn-lg" ng-model="completition" ng-change="filterTasks(completition,owner,formData.email)" uib-btn-radio="'done'">Done</label>
+                        <label class="btn btn-default btn-lg" ng-model="completition" ng-change="filterTasks(completition,owner,formData.email)" uib-btn-radio="'undone'">Undone</label>
                     </div>
-                    <!--<div class="btn-group" data-toggle="buttons">-->
-                    <!--  <label class="btn btn-default" ng-class="{'active':type=='all'}">-->
-                    <!--    <input type="radio" ng-model="type" value="all"> All-->
-                    <!--  </label>-->
-                    <!--  <label class="btn btn-default" ng-class="{'active':type=='done'}">-->
-                    <!--    <input type="radio" ng-model="type" value="done"> Done-->
-                    <!--  </label>-->
-                    <!--  <label class="btn btn-default" ng-class="{'active':type=='undone'}">-->
-                    <!--    <input type="radio" ng-model="type" value="undone"> Undone-->
-                    <!--  </label>-->
-                    <!--</div>-->
+                    <div class="btn-group pull-right">
+                        <label class="btn btn-default btn-lg" ng-model="owner" ng-change="filterTasks(completition,owner,formData.email)" uib-btn-radio="'all'">All</label>
+                        <label class="btn btn-default btn-lg" ng-model="owner" ng-change="filterTasks(completition,owner,formData.email)" uib-btn-radio="'my'">My</label>
+                    </div>
                 </div>
             </div>
     
@@ -91,14 +84,20 @@
                         <li class="list-group-item" ng-repeat="todo in todos">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" ng-click="completeTodo(todo._id)" ng-model="todo.isCompleted"> <span ng-class="{ 'completed' : todo.isCompleted }">{{ todo.text }} ({{ todo.email }})</span>
+                                    <input type="checkbox" ng-click="completeTodo(todo._id,completition,owner,formData.email)" ng-model="todo.isCompleted"> <span ng-class="{ 'completed' : todo.isCompleted }">{{ todo.text }} ({{ todo.email }})</span>
                                 </label>
                                 <div class="pull-right" ng-if="todo.email==formData.email">
-                                    <span ng-click="deleteTodo(todo._id,completition)" style="cursor: pointer;" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    <span ng-click="deleteTodo(todo._id,completition,owner,formData.email)" style="cursor: pointer;" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                 </div>
                             </div>
                         </li>
                     </ul>
+                </div>
+                <div class="col-sm-6">
+                    My tasks <span class="badge">{{myTasks}}</span><br />
+                    All tasks <span class="badge">{{allTasks}}</span><br />
+                    Done tasks <span class="badge">{{doneTasks}}</span><br />
+                    Undone tasks <span class="badge">{{undoneTasks}}</span>
                 </div>
             </div>
         </div>
