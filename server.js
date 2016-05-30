@@ -236,10 +236,10 @@
                 }
                 
                 todo.save(function(err) {
-                  if (err)
-                    console.log('error')
-                  else
-                    console.log('success')
+                    if (err)
+                        console.log('error')
+                    else
+                        console.log('success')
                 });
                 
                 if(req.params.completition == 'all'){
@@ -298,8 +298,5 @@
         });
     });
     
-    
-
-    // listen
     app.listen(8080);
     console.log("App listening on port 8080");

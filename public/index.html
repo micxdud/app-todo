@@ -6,9 +6,6 @@
 
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
     
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    
     <style>
         body { padding-top:30px; }
         #list { margin-bottom:30px; }
@@ -16,7 +13,7 @@
     </style>
    
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script><!-- load angular -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap.min.js"></script><!-- load bootstrap directives for angular -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap.min.js"></script><!-- load bootstrap directives for angular -->
    
     <script src="core.js"></script>
 </head>
@@ -34,12 +31,10 @@
                         </div>
                         <div class="panel-body">
                             <form ng-submit="login()">
-                                <fieldset>
-                                    <div class="form-group">
-                                        <input class="form-control" placeholder="E-mail" type="email" ng-model="formData.email" autofocus>
-                                    </div>
-                                    <button class="btn btn-lg btn-success btn-block">Login</button>
-                                </fieldset>
+                                <div class="form-group">
+                                    <input class="form-control" type="email" ng-model="formData.email">
+                                </div>
+                                <button class="btn btn-lg btn-success btn-block">Login</button>
                             </form>
                         </div>
                     </div>
@@ -50,7 +45,7 @@
         <div ng-if="logged">
             <!-- HEADER AND TODO COUNT -->
             <div class="jumbotron text-center">
-                <h1>Tasks left <span class="label label-info">{{ allTasks }}</span></h1>
+                <h1>Todo Application</h1>
             </div>
             
             <!-- FORM TO CREATE TODO -->
@@ -83,9 +78,9 @@
                     <ul class="list-group">
                         <li class="list-group-item" ng-repeat="todo in todos">
                             <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" ng-click="completeTodo(todo._id,completition,owner,formData.email)" ng-model="todo.isCompleted"> <span ng-class="{ 'completed' : todo.isCompleted }">{{ todo.text }} ({{ todo.email }})</span>
-                                </label>
+                                <input type="checkbox" ng-click="completeTodo(todo._id,completition,owner,formData.email)" ng-model="todo.isCompleted"> 
+                                    <span ng-class="{ 'completed' : todo.isCompleted }">{{ todo.text }} ({{ todo.email }})</span>
+                               
                                 <div class="pull-right" ng-if="todo.email==formData.email">
                                     <span ng-click="deleteTodo(todo._id,completition,owner,formData.email)" style="cursor: pointer;" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                 </div>
@@ -94,10 +89,16 @@
                     </ul>
                 </div>
                 <div class="col-sm-6">
-                    My tasks <span class="badge">{{myTasks}}</span><br />
-                    All tasks <span class="badge">{{allTasks}}</span><br />
-                    Done tasks <span class="badge">{{doneTasks}}</span><br />
-                    Undone tasks <span class="badge">{{undoneTasks}}</span>
+                    <h1> <span class="label label-info">Statistics</span></h1>
+                    <div class="col-sm-6">
+                        <span class="badge">{{myTasks}}</span> My tasks <br />
+                        <span class="badge">{{myTasksDone}}</span> My done tasks <br />
+                        <span class="badge">{{myTasksUndone}}</span> My undone tasks <br />
+                        <br />
+                        <span class="badge">{{allTasks}}</span> All tasks <br />
+                        <span class="badge">{{doneTasks}}</span> Done tasks <br />
+                        <span class="badge">{{undoneTasks}}</span> Undone tasks 
+                    </div>
                 </div>
             </div>
         </div>

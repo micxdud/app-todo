@@ -11,6 +11,8 @@ todo.controller('mainController', ['$scope', '$http', function ($scope, $http) {
     $scope.owner = 'all';
     
     $scope.myTasks = 0;
+    $scope.myTasksDone = 0;
+    $scope.myTasksUndone = 0;
     $scope.allTasks = 0;
     $scope.doneTasks = 0;
     $scope.undoneTasks = 0;
@@ -34,17 +36,22 @@ todo.controller('mainController', ['$scope', '$http', function ($scope, $http) {
     $scope.login = function() {
         email = $scope.formData.email;
         $scope.logged = true;
+        $scope.allTasks = $scope.todos.length;
         
         for(var i=0;i<$scope.todos.length;i++){
             if($scope.formData.email == $scope.todos[i]['email']){
                 $scope.myTasks++;
             }
             
-            $scope.allTasks = $scope.todos.length;
-            
             if($scope.todos[i]['isCompleted'] == true){
+                if ($scope.formData.email == $scope.todos[i]['email']){
+                    $scope.myTasksDone++;
+                }
                 $scope.doneTasks++;
             }else{
+                if ($scope.formData.email == $scope.todos[i]['email']){
+                    $scope.myTasksUndone++;
+                }
                 $scope.undoneTasks++;
             }
         }
@@ -60,7 +67,9 @@ todo.controller('mainController', ['$scope', '$http', function ($scope, $http) {
                  $http.get('/api/todos')
                     .success(function(data) {
                         $scope.myTasks = 0;
-                        $scope.allTasks = 0;
+                        $scope.myTasksDone = 0;
+                        $scope.myTasksUndone = 0;
+                        $scope.allTasks = data.length;
                         $scope.doneTasks = 0;
                         $scope.undoneTasks = 0;
                         
@@ -69,11 +78,15 @@ todo.controller('mainController', ['$scope', '$http', function ($scope, $http) {
                                 $scope.myTasks++;
                             }
                             
-                            $scope.allTasks = data.length;
-                            
                             if(data[i]['isCompleted'] == true){
+                                if ($scope.formData.email == $scope.todos[i]['email']){
+                                    $scope.myTasksDone++;
+                                }
                                 $scope.doneTasks++;
                             }else{
+                                if ($scope.formData.email == $scope.todos[i]['email']){
+                                    $scope.myTasksUndone++;
+                                }
                                 $scope.undoneTasks++;
                             }
                         }
@@ -91,7 +104,9 @@ todo.controller('mainController', ['$scope', '$http', function ($scope, $http) {
                 $http.get('/api/todos')
                     .success(function(data) {
                         $scope.myTasks = 0;
-                        $scope.allTasks = 0;
+                        $scope.myTasksDone = 0;
+                        $scope.myTasksUndone = 0;
+                        $scope.allTasks = data.length;
                         $scope.doneTasks = 0;
                         $scope.undoneTasks = 0;
                         
@@ -100,11 +115,15 @@ todo.controller('mainController', ['$scope', '$http', function ($scope, $http) {
                                 $scope.myTasks++;
                             }
                             
-                            $scope.allTasks = data.length;
-                            
                             if(data[i]['isCompleted'] == true){
+                                if ($scope.formData.email == $scope.todos[i]['email']){
+                                    $scope.myTasksDone++;
+                                }
                                 $scope.doneTasks++;
                             }else{
+                                if ($scope.formData.email == $scope.todos[i]['email']){
+                                    $scope.myTasksUndone++;
+                                }
                                 $scope.undoneTasks++;
                             }
                         }
@@ -121,7 +140,9 @@ todo.controller('mainController', ['$scope', '$http', function ($scope, $http) {
                $http.get('/api/todos')
                     .success(function(data) {
                         $scope.myTasks = 0;
-                        $scope.allTasks = 0;
+                        $scope.myTasksDone = 0;
+                        $scope.myTasksUndone = 0;
+                        $scope.allTasks = data.length;
                         $scope.doneTasks = 0;
                         $scope.undoneTasks = 0;
                         
@@ -130,11 +151,15 @@ todo.controller('mainController', ['$scope', '$http', function ($scope, $http) {
                                 $scope.myTasks++;
                             }
                             
-                            $scope.allTasks = data.length;
-                            
                             if(data[i]['isCompleted'] == true){
+                                if ($scope.formData.email == $scope.todos[i]['email']){
+                                    $scope.myTasksDone++;
+                                }
                                 $scope.doneTasks++;
                             }else{
+                                if ($scope.formData.email == $scope.todos[i]['email']){
+                                    $scope.myTasksUndone++;
+                                }
                                 $scope.undoneTasks++;
                             }
                         }
